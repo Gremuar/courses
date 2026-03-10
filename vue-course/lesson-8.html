@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 8: Pinia (State)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 8</span>
+        Pinia (State)
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Pinia — управление состоянием</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Что такое Pinia?</h2>
+        <p>Pinia — официальная библиотека для управления состоянием в Vue. Она заменила Vuex и стала рекомендуемым решением.</p>
+
+        <h2>Установка</h2>
+        <pre><code>npm install pinia</code></pre>
+
+        <h2>Настройка в main.js</h2>
+        <pre><code><span class="code-keyword">import</span> { <span class="code-function">createPinia</span> } <span class="code-keyword">from</span> <span class="code-string">'pinia'</span>
+<span class="code-keyword">const</span> pinia = <span class="code-function">createPinia</span>()
+app.<span class="code-function">use</span>(pinia)</code></pre>
+
+        <h2>Создание Store</h2>
+        <pre><code><span class="code-keyword">import</span> { <span class="code-function">defineStore</span> } <span class="code-keyword">from</span> <span class="code-string">'pinia'</span>
+
+<span class="code-keyword">export const</span> <span class="code-function">useUserStore</span> = <span class="code-function">defineStore</span>(<span class="code-string">'user'</span>, {
+  <span class="code-property">state</span>: () => ({
+    <span class="code-property">name</span>: <span class="code-string">''</span>,
+    <span class="code-property">email</span>: <span class="code-string">''</span>,
+    <span class="code-property">isLoggedIn</span>: <span class="code-keyword">false</span>
+  }),
+  
+  <span class="code-property">getters</span>: {
+    <span class="code-function">greeting</span>: (state) => <span class="code-string">`Привет, ${state.name}!`</span>
+  },
+  
+  <span class="code-property">actions</span>: {
+    <span class="code-function">login</span>(userData) {
+      <span class="code-keyword">this</span>.name = userData.name
+      <span class="code-keyword">this</span>.email = userData.email
+      <span class="code-keyword">this</span>.isLoggedIn = <span class="code-keyword">true</span>
+    },
+    <span class="code-function">logout</span>() {
+      <span class="code-keyword">this</span>.name = <span class="code-string">''</span>
+      <span class="code-keyword">this</span>.email = <span class="code-string">''</span>
+      <span class="code-keyword">this</span>.isLoggedIn = <span class="code-keyword">false</span>
+    }
+  }
+})</code></pre>
+
+        <h2>Использование в компоненте</h2>
+        <pre><code><span class="code-keyword">import</span> { <span class="code-function">useUserStore</span> } <span class="code-keyword">from</span> <span class="code-string">'@/stores/user'</span>
+
+<span class="code-keyword">export default</span> {
+  <span class="code-function">setup</span>() {
+    <span class="code-keyword">const</span> userStore = <span class="code-function">useUserStore</span>()
+    
+    <span class="code-keyword">return</span> { 
+      <span class="code-property">userStore</span>,
+      <span class="code-property">name</span>: userStore.name
+    }
+  }
+}</code></pre>
+
+        <h2>Основные понятия</h2>
+        <ul>
+          <li><strong>state</strong> — данные (как data в компоненте)</li>
+          <li><strong>getters</strong> — вычисляемые свойства (как computed)</li>
+          <li><strong>actions</strong> — методы для изменения состояния</li>
+        </ul>
+
+        <h2>Практическое задание</h2>
+        <p>Создай store для списка задач с добавлением, удалением и фильтрацией.</p>
+      </div>
+
+      <div class="test-section">
+        <div class="test-header">
+          <h3>📝 Тест на закрепление</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" onclick="checkTest()">Проверить</button>
+        <div class="test-result" id="testResult">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav">
+        <a href="lesson-9.html">Следующий урок →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "Pinia это?", options: ["Роутер", "State менеджер", "База данных", "CSS фреймворк"], correct: 1 },
+      { q: "defineStore принимает?", options: ["объект", "строку и функцию", "массив", "класс"], correct: 1 },
+      { q: "state в Pinia это?", options: ["метод", "функция возвращающая состояние", "хук", "компонент"], correct: 1 },
+      { q: "actions нужны для?", options: ["Вычислений", "Изменения состояния", "Роутинга", "Анимаций"], correct: 1 },
+      { q: "Getters аналогичны?", options: ["actions", "methods", "computed", "watch"], correct: 2 }
+    ];
+
+    let answers = [], testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const currentId = 8;
+      document.getElementById('sidebarLessons').innerHTML = lessons.map(l => `<a href="lesson-${l.id}.html" class="sidebar-item ${l.id === currentId ? 'active' : ''}">${l.id}. ${l.title}</a>`).join('');
+    }
+
+    function renderTest() {
+      document.getElementById('testQuestions').innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `<label class="test-option" onclick="selectAnswer(${i}, ${j})"><input type="radio" name="q${i}" value="${j}"><span>${opt}</span></label>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => opt.classList.toggle('selected', i === aIdx));
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) { alert('Ответьте на все вопросы!'); return; }
+      testChecked = true;
+      let score = 0;
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option').forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? 'Отлично!' : 'Повтори материал';
+      document.getElementById('testResult').style.display = 'block';
+      document.querySelector('.test-btn').style.display = 'none';
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[8] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>

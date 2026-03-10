@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Course - Главное меню</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="header-title">
+        🎓 Vue.js Course
+        <span id="progressText">0/10</span>
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰ Оглавление</button>
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="progress-stats">
+        <h2>Твой прогресс</h2>
+        <div class="count"><span id="completedCount">0</span> из 10</div>
+      </div>
+      <div class="lessons-grid" id="lessonsGrid"></div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js", desc: "Что такое Vue.js, установка, первое приложение" },
+      { id: 2, title: "Vue Instance", desc: "Экземпляр Vue, реактивность, data, methods, computed" },
+      { id: 3, title: "Директивы", desc: "v-if, v-for, v-bind, v-on, v-model" },
+      { id: 4, title: "Компоненты", desc: "Создание, props, events, slots" },
+      { id: 5, title: "Computed & Watch", desc: "Вычисляемые свойства и наблюдатели" },
+      { id: 6, title: "Lifecycle Hooks", desc: "Жизненный цикл компонентов" },
+      { id: 7, title: "Vue CLI и Router", desc: "Создание проекта, маршрутизация" },
+      { id: 8, title: "Pinia (State)", desc: "Управление состоянием" },
+      { id: 9, title: "Composition API", desc: "Vue 3 подход: script setup, ref, reactive" },
+      { id: 10, title: "Итоговый проект", desc: "Создание Todo App - всё вместе" }
+    ];
+
+    let progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+
+    function saveProgress() {
+      localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      updateUI();
+    }
+
+    function updateUI() {
+      const completed = Object.values(progress).filter(p => p.completed).length;
+      document.getElementById('completedCount').textContent = completed;
+      document.getElementById('progressText').textContent = `${completed}/10`;
+
+      // Render grid
+      const grid = document.getElementById('lessonsGrid');
+      grid.innerHTML = lessons.map(lesson => {
+        const p = progress[lesson.id] || { completed: false, inProgress: false };
+        let statusClass = '';
+        let statusText = 'Не начат';
+        
+        if (p.completed) {
+          statusClass = 'completed';
+          statusText = '✓ Завершён';
+        } else if (p.inProgress) {
+          statusClass = 'in-progress';
+          statusText = 'В процессе';
+        }
+
+        return `
+          <div class="lesson-card ${statusClass}" onclick="openLesson(${lesson.id})">
+            <div class="lesson-number">${lesson.id}</div>
+            <h3 class="lesson-title">${lesson.title}</h3>
+            <p class="lesson-desc">${lesson.desc}</p>
+            <div class="lesson-status">
+              <span class="lesson-status-dot"></span>
+              <span>${statusText}</span>
+            </div>
+            <button class="lesson-btn" onclick="event.stopPropagation(); openLesson(${lesson.id})">
+              ${p.completed ? 'Повторить' : p.inProgress ? 'Продолжить' : 'Начать'}
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      // Render sidebar
+      const sidebar = document.getElementById('sidebarLessons');
+      sidebar.innerHTML = lessons.map(lesson => {
+        const p = progress[lesson.id] || { completed: false };
+        const activeClass = '';
+        const completedClass = p.completed ? 'completed' : '';
+        return `
+          <a href="lesson-${lesson.id}.html" class="sidebar-item ${activeClass} ${completedClass}" onclick="startLesson(${lesson.id})">
+            <span>${lesson.id}. ${lesson.title}</span>
+            ${p.completed ? '<span class="lesson-status-dot"></span>' : ''}
+          </a>
+        `;
+      }).join('');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function openLesson(id) {
+      progress[id] = progress[id] || {};
+      progress[id].inProgress = true;
+      saveProgress();
+      window.location.href = `lesson-${id}.html`;
+    }
+
+    function startLesson(id) {
+      progress[id] = progress[id] || {};
+      progress[id].inProgress = true;
+      saveProgress();
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>

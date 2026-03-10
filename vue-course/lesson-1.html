@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 1: Введение в Vue.js</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 1</span>
+        Введение в Vue.js
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Введение в Vue.js</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Что такое Vue.js?</h2>
+        <p>Vue.js — это прогрессивный JavaScript фреймворк для создания пользовательских интерфейсов. Он отличается лёгкостью изучения и гибкостью использования.</p>
+
+        <h2>Особенности Vue.js</h2>
+        <ul>
+          <li><strong>Реактивность</strong> — данные автоматически обновляют интерфейс</li>
+          <li><strong>Компонентный подход</strong> — переиспользуемые блоки кода</li>
+          <li><strong>Лёгкий порог входа</strong> — быстрое освоение</li>
+          <li><strong>Гибкость</strong> — можно использовать как библиотеку или полноценный фреймворк</li>
+        </ul>
+
+        <h2>Установка через CDN</h2>
+        <p>Самый быстрый способ начать — подключить Vue через CDN:</p>
+
+        <pre><code><span class="code-tag">&lt;script</span> <span class="code-attr">src</span>=<span class="code-string">"https://unpkg.com/vue@3/dist/vue.global.js"</span><span class="code-tag">&gt;&lt;/script&gt;</span></code></pre>
+
+        <h2>Первое приложение</h2>
+        <p>Создадим простое приложение "Hello Vue":</p>
+
+        <pre><code><span class="code-tag">&lt;div</span> <span class="code-attr">id</span>=<span class="code-string">"app"</span><span class="code-tag">&gt;</span>
+  {{ message }}
+<span class="code-tag">&lt;/div&gt;</span>
+
+<span class="code-tag">&lt;script&gt;</span>
+  <span class="code-keyword">const</span> app = Vue.<span class="code-function">createApp</span>({
+    <span class="code-property">data</span>() {
+      <span class="code-keyword">return</span> {
+        <span class="code-property">message</span>: <span class="code-string">'Hello Vue!'</span>
+      }
+    }
+  })
+  app.<span class="code-function">mount</span>(<span class="code-string">'#app'</span>)
+<span class="code-tag">&lt;/script&gt;</span></code></pre>
+
+        <h2>Ключевые концепции</h2>
+        <ol>
+          <li><strong>Экземпляр Vue</strong> — корневой объект приложения</li>
+          <li><strong>Реактивность</strong> — автоматическое обновление UI при изменении данных</li>
+          <li><strong>Шаблоны</strong> — HTML с Vue-синтаксисом</li>
+          <li><strong>Директивы</strong> — специальные атрибуты для реактивного поведения</li>
+        </ol>
+
+        <h2>Практическое задание</h2>
+        <p>Создай HTML-файл с:</p>
+        <ol>
+          <li>Подключённым Vue 3 через CDN</li>
+          <li>Заголовком "Моё первое Vue приложение"</li>
+          <li>Кнопкой, которая меняет текст при клике</li>
+        </ol>
+      </div>
+
+      <div class="test-section" id="testSection">
+        <div class="test-header">
+          <h3>📝 Тест на закрепление</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" id="testBtn" onclick="checkTest()">Проверить</button>
+        <div class="test-result" id="testResult" style="display: none;">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav">
+        <a href="lesson-2.html">Следующий урок →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "Что такое Vue.js?", options: ["База данных", "JavaScript фреймворк", "Язык программирования", "Веб-сервер"], correct: 1 },
+      { q: "Какой способ установки Vue самый быстрый?", options: ["npm install", "CDN", "yarn", "bower"], correct: 1 },
+      { q: "Какая функция создаёт приложение Vue 3?", options: ["Vue.init()", "Vue.createApp()", "new Vue()", "Vue.mount()"], correct: 1 },
+      { q: "Что такое реактивность в Vue?", options: ["Анимации", "Автообновление DOM при изменении данных", "Маршрутизация", "Компоненты"], correct: 1 },
+      { q: "Какой метод монтирует Vue к элементу?", options: ["mount()", "render()", "append()", "attach()"], correct: 0 }
+    ];
+
+    let answers = [];
+    let testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const sidebar = document.getElementById('sidebarLessons');
+      const currentId = 1;
+      sidebar.innerHTML = lessons.map(l => {
+        const isActive = l.id === currentId;
+        return `<a href="lesson-${l.id}.html" class="sidebar-item ${isActive ? 'active' : ''}">${l.id}. ${l.title}</a>`;
+      }).join('');
+    }
+
+    function renderTest() {
+      const container = document.getElementById('testQuestions');
+      container.innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `
+              <label class="test-option" onclick="selectAnswer(${i}, ${j})">
+                <input type="radio" name="q${i}" value="${j}">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => {
+        opt.classList.toggle('selected', i === aIdx);
+      });
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) {
+        alert('Ответьте на все вопросы!');
+        return;
+      }
+
+      testChecked = true;
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        
+        const options = document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option');
+        options.forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? 'Отлично! Продолжай!' : 'Перечитай материал и попробуй ещё раз';
+      document.getElementById('testResult').style.display = 'block';
+      document.getElementById('testBtn').style.display = 'none';
+
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[1] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>

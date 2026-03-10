@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 6: Lifecycle Hooks</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 6</span>
+        Lifecycle Hooks
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Жизненный цикл компонентов</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Этапы жизненного цикла</h2>
+        <p>Каждый компонент Vue проходит через несколько этапов: создание, монтирование, обновление и удаление.</p>
+
+        <pre><code>Создание → Монтирование → Обновление → Удаление</code></pre>
+
+        <h2>Основные хуки</h2>
+
+        <h3>created</h3>
+        <p>Вызывается после создания экземпляра. Данные и методы уже доступны.</p>
+
+        <h3>mounted</h3>
+        <p>Вызывается после монтирования в DOM. DOM готов к работе.</p>
+
+        <h3>updated</h3>
+        <p>Вызывается после обновления DOM из-за реактивных изменений.</p>
+
+        <h3>unmounted</h3>
+        <p>Вызывается после удаления компонента из DOM.</p>
+
+        <pre><code><span class="code-keyword">export default</span> {
+  <span class="code-function">created</span>() {
+    console.<span class="code-function">log</span>(<span class="code-string">'Компонент создан'</span>)
+  },
+  
+  <span class="code-function">mounted</span>() {
+    console.<span class="code-function">log</span>(<span class="code-string">'DOM готов'</span>)
+    <span class="code-comment">// Получение данных, подписки</span>
+  },
+  
+  <span class="code-function">updated</span>() {
+    console.<span class="code-function">log</span>(<span class="code-string">'Компонент обновлён'</span>)
+  },
+  
+  <span class="code-function">unmounted</span>() {
+    console.<span class="code-function">log</span>(<span class="code-string">'Компонент удалён'</span>)
+    <span class="code-comment">// Очистка таймеров, подписок</span>
+  }
+}</code></pre>
+
+        <h2>Практический пример</h2>
+        <pre><code><span class="code-keyword">export default</span> {
+  <span class="code-property">data</span>() {
+    <span class="code-keyword">return</span> { <span class="code-property">users</span>: [] }
+  },
+  
+  <span class="code-function">created</span>() {
+    <span class="code-keyword">this</span>.<span class="code-function">fetchUsers</span>()
+  },
+  
+  <span class="code-property">methods</span>: {
+    <span class="code-keyword">async</span> <span class="code-function">fetchUsers</span>() {
+      <span class="code-keyword">this</span>.users = <span class="code-keyword">await</span> <span class="code-function">fetch</span>(<span class="code-string">'/api/users'</span>).<span class="code-function">then</span>(r => r.json())
+    }
+  }
+}</code></pre>
+
+        <h2>Практическое задание</h2>
+        <p>Добавь таймер, который запускается при монтировании и очищается при удалении.</p>
+      </div>
+
+      <div class="test-section">
+        <div class="test-header">
+          <h3>📝 Тест на закрепление</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" onclick="checkTest()">Проверить</button>
+        <div class="test-result" id="testResult">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav">
+        <a href="lesson-7.html">Следующий урок →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "Какой хук при создании компонента?", options: ["mounted", "created", "updated", "destroyed"], correct: 1 },
+      { q: "Когда DOM готов?", options: ["created", "mounted", "updated", "beforeMount"], correct: 1 },
+      { q: "Какой хук при удалении компонента?", options: ["deleted", "removed", "unmounted", "destroyed"], correct: 2 },
+      { q: "created vs mounted: разница?", options: ["нет разницы", "created - до DOM, mounted - после", "обратно", "только для SSR"], correct: 1 },
+      { q: "updated вызывается при?", options: ["создании", "изменении данных", "удалении", "initial render"], correct: 1 }
+    ];
+
+    let answers = [], testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const currentId = 6;
+      document.getElementById('sidebarLessons').innerHTML = lessons.map(l => `<a href="lesson-${l.id}.html" class="sidebar-item ${l.id === currentId ? 'active' : ''}">${l.id}. ${l.title}</a>`).join('');
+    }
+
+    function renderTest() {
+      document.getElementById('testQuestions').innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `<label class="test-option" onclick="selectAnswer(${i}, ${j})"><input type="radio" name="q${i}" value="${j}"><span>${opt}</span></label>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => opt.classList.toggle('selected', i === aIdx));
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) { alert('Ответьте на все вопросы!'); return; }
+      testChecked = true;
+      let score = 0;
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option').forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? 'Отлично!' : 'Повтори материал';
+      document.getElementById('testResult').style.display = 'block';
+      document.querySelector('.test-btn').style.display = 'none';
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[6] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>

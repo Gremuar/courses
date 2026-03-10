@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 10: Итоговый проект</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 10</span>
+        Итоговый проект
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Итоговый проект — Todo App</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Цель проекта</h2>
+        <p>Создать полноценное приложение "Список задач" (Todo App), используя все изученные технологии Vue.js.</p>
+
+        <h2>Функционал</h2>
+        <ul>
+          <li>✅ Добавление задачи</li>
+          <li>✅ Удаление задачи</li>
+          <li>✅ Отметка выполнено/не выполнено</li>
+          <li>✅ Фильтрация (все/активные/выполненные)</li>
+          <li>✅ Счётчик активных задач</li>
+          <li>✅ Сохранение в localStorage</li>
+        </ul>
+
+        <h2>Технологии</h2>
+        <ul>
+          <li>Vue 3 (Composition API + script setup)</li>
+          <li>Vue Router (страницы: список, архив)</li>
+          <li>Pinia (глобальное состояние)</li>
+          <li>Vite (сборка)</li>
+        </ul>
+
+        <h2>Структура проекта</h2>
+        <pre><code>src/
+├── components/
+│   ├── TodoItem.vue
+│   ├── TodoInput.vue
+│   └── TodoFilter.vue
+├── stores/
+│   └── todo.js
+├── views/
+│   ├── HomeView.vue
+│   └── ArchiveView.vue
+├── router/
+│   └── index.js
+├── App.vue
+└── main.js</code></pre>
+
+        <h2>Пример Store (Pinia)</h2>
+        <pre><code><span class="code-keyword">import</span> { <span class="code-function">defineStore</span> } <span class="code-keyword">from</span> <span class="code-string">'pinia'</span>
+<span class="code-keyword">import</span> { <span class="code-property">ref</span>, <span class="code-property">computed</span> } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+
+<span class="code-keyword">export const</span> <span class="code-function">useTodoStore</span> = <span class="code-function">defineStore</span>(<span class="code-string">'todo'</span>, () => {
+  <span class="code-keyword">const</span> todos = <span class="code-function">ref</span>(JSON.<span class="code-function">parse</span>(localStorage.<span class="code-function">getItem</span>(<span class="code-string">'todos'</span>)) || [])
+  
+  <span class="code-keyword">const</span> activeCount = <span class="code-function">computed</span>(() => 
+    todos.value.<span class="code-function">filter</span>(t => !t.completed).length
+  )
+  
+  <span class="code-keyword">function</span> <span class="code-function">addTodo</span>(text) {
+    todos.value.<span class="code-function">push</span>({
+      <span class="code-property">id</span>: Date.<span class="code-function">now</span>(),
+      <span class="code-property">text</span>,
+      <span class="code-property">completed</span>: <span class="code-keyword">false</span>
+    })
+    <span class="code-function">save</span>()
+  }
+  
+  <span class="code-keyword">function</span> <span class="code-function">toggleTodo</span>(id) {
+    <span class="code-keyword">const</span> todo = todos.value.<span class="code-function">find</span>(t => t.id === id)
+    <span class="code-keyword">if</span> (todo) todo.completed = !todo.completed
+    <span class="code-function">save</span>()
+  }
+  
+  <span class="code-keyword">function</span> <span class="code-function">deleteTodo</span>(id) {
+    todos.value = todos.value.<span class="code-function">filter</span>(t => t.id !== id)
+    <span class="code-function">save</span>()
+  }
+  
+  <span class="code-keyword">function</span> <span class="code-function">save</span>() {
+    localStorage.<span class="code-function">setItem</span>(<span class="code-string">'todos'</span>, JSON.<span class="code-function">stringify</span>(todos.value))
+  }
+  
+  <span class="code-keyword">return</span> { todos, activeCount, addTodo, toggleTodo, deleteTodo }
+})</code></pre>
+
+        <h2>Критерии оценки</h2>
+        <ol>
+          <li>Приложение работает без ошибок</li>
+          <li>Сохранение в localStorage работает</li>
+          <li>Фильтрация задач работает</li>
+          <li>Активный счётчик обновляется</li>
+          <li>Код использует Composition API</li>
+        </ol>
+
+        <h2>Деплой</h2>
+        <pre><code><span class="code-comment"># Сборка</span>
+npm run build
+
+<span class="code-comment"># Результат в папке dist/</span></code></pre>
+        <p>Задеплоить можно на Netlify, Vercel или GitHub Pages.</p>
+
+        <h2>Поздравляем!</h2>
+        <p>Вы прошли полный курс Vue.js! Теперь у вас есть все необходимые знания для создания современных веб-приложений.</p>
+      </div>
+
+      <div class="test-section">
+        <div class="test-header">
+          <h3>📝 Итоговый тест</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" onclick="checkTest()">Завершить курс</button>
+        <div class="test-result" id="testResult">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav" style="display: none;">
+        <a href="index.html">🎉 Завершить курс!</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "Какой API используется в финальном проекте?", options: ["Options API", "Composition API", "Class API", "Functional API"], correct: 1 },
+      { q: "localStorage нужен для?", options: ["Роутинга", "Сохранения данных", "Анимаций", "Стилей"], correct: 1 },
+      { q: "npm run build делает?", options: ["Запускает dev сервер", "Собирает продакшн", "Запускает тесты", "Создаёт компоненты"], correct: 1 },
+      { q: "Фильтрация в Todo реализуется через?", options: ["Router", "Computed/Watcher", "Lifecycle", "Components"], correct: 1 },
+      { q: "Куда деплоить Vue приложение?", options: ["Только на сервер", "Vercel, Netlify, GitHub Pages", "Только на VPS", "Никуда"], correct: 1 }
+    ];
+
+    let answers = [], testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const currentId = 10;
+      document.getElementById('sidebarLessons').innerHTML = lessons.map(l => `<a href="lesson-${l.id}.html" class="sidebar-item ${l.id === currentId ? 'active' : ''}">${l.id}. ${l.title}</a>`).join('');
+    }
+
+    function renderTest() {
+      document.getElementById('testQuestions').innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `<label class="test-option" onclick="selectAnswer(${i}, ${j})"><input type="radio" name="q${i}" value="${j}"><span>${opt}</span></label>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => opt.classList.toggle('selected', i === aIdx));
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) { alert('Ответьте на все вопросы!'); return; }
+      testChecked = true;
+      let score = 0;
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option').forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? '🎉 Поздравляем! Вы прошли курс Vue.js!' : 'Пересдай тест';
+      document.getElementById('testResult').style.display = 'block';
+      document.querySelector('.test-btn').style.display = 'none';
+      
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[10] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+        document.getElementById('lessonNav').style.display = 'flex';
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>

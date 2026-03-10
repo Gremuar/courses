@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 9: Composition API</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 9</span>
+        Composition API
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Composition API</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Введение</h2>
+        <p>Composition API — новый подход в Vue 3 для организации логики компонентов. Он предлагает более гибкую структуру кода.</p>
+
+        <h2>script setup</h2>
+        <p>Современный синтаксис, делающий код короче и понятнее.</p>
+
+        <pre><code><span class="code-tag">&lt;script setup&gt;</span>
+<span class="code-keyword">import</span> { <span class="code-property">ref</span>, <span class="code-property">computed</span> } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+
+<span class="code-keyword">const</span> count = <span class="code-function">ref</span>(<span class="code-number">0</span>)
+<span class="code-keyword">const</span> doubled = <span class="code-function">computed</span>(() => count.value * <span class="code-number">2</span>)
+
+<span class="code-keyword">function</span> <span class="code-function">increment</span>() {
+  count.value++
+}
+<span class="code-tag">&lt;/script&gt;</span>
+
+<span class="code-tag">&lt;template&gt;</span>
+  <span class="code-tag">&lt;button</span> <span class="code-attr">@click</span>=<span class="code-string">"increment"</span><span class="code-tag">&gt;</span>
+    {{ count }} x 2 = {{ doubled }}
+  <span class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;/template&gt;</span></code></pre>
+
+        <h2>ref vs reactive</h2>
+
+        <h3>ref — для примитивов</h3>
+        <pre><code><span class="code-keyword">const</span> count = <span class="code-function">ref</span>(<span class="code-number">0</span>)
+count.value++  <span class="code-comment">// .value для доступа</span></code></pre>
+
+        <h3>reactive — для объектов</h3>
+        <pre><code><span class="code-keyword">const</span> state = <span class="code-function">reactive</span>({
+  <span class="code-property">user</span>: { <span class="code-property">name</span>: <span class="code-string">'Ivan'</span> },
+  <span class="code-property">items</span>: []
+})
+state.user.name = <span class="code-string">'Petya'</span>  <span class="code-comment">// без .value</span></code></pre>
+
+        <h2>Composables</h2>
+        <p>Переиспользуемая логика в виде функций.</p>
+
+        <pre><code><span class="code-comment">// useCounter.js</span>
+<span class="code-keyword">import</span> { <span class="code-property">ref</span> } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+
+<span class="code-keyword">export function</span> <span class="code-function">useCounter</span>() {
+  <span class="code-keyword">const</span> count = <span class="code-function">ref</span>(<span class="code-number">0</span>)
+  <span class="code-keyword">const</span> <span class="code-function">increment</span> = () => count.value++
+  <span class="code-keyword">const</span> <span class="code-function">decrement</span> = () => count.value--
+  
+  <span class="code-keyword">return</span> { count, increment, decrement }
+}</code></pre>
+
+        <h2>Использование composable</h2>
+        <pre><code><span class="code-key</span> { word">import<span class="code-function">useCounter</span> } <span class="code-keyword">from</span> <span class="code-string">'@/composables/useCounter'</span>
+
+<span class="code-keyword">const</span> { count, increment, decrement } = <span class="code-function">useCounter</span>()</code></pre>
+
+        <h2>Lifecycle в Composition API</h2>
+        <pre><code><span class="code-keyword">import</span> { <span class="code-property">onMounted</span>, <span class="code-property">onUnmounted</span> } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>
+
+<span class="code-function">onMounted</span>(() => {
+  console.<span class="code-function">log</span>(<span class="code-string">'Монтирован'</span>)
+})
+
+<span class="code-function">onUnmounted</span>(() => {
+  console.<span class="code-function">log</span>(<span class="code-string">'Размонтирован'</span>)
+})</code></pre>
+
+        <h2>Практическое задание</h2>
+        <p>Создай composable для работы с localStorage.</p>
+      </div>
+
+      <div class="test-section">
+        <div class="test-header">
+          <h3>📝 Тест на закрепление</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" onclick="checkTest()">Проверить</button>
+        <div class="test-result" id="testResult">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav">
+        <a href="lesson-10.html">Следующий урок →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "script setup это?", options: ["Хук", "Синтаксис Composition API", "Директива", "Компонент"], correct: 1 },
+      { q: "ref() используется для?", options: ["Объектов", "Примитивов", "Методов", "Слотов"], correct: 1 },
+      { q: "reactive() для?", options: ["Примитивов", "Объектов", "Массивов", "Строк"], correct: 1 },
+      { q: ".value нужно для?", options: ["ref()", "reactive()", "computed()", "всех"], correct: 0 },
+      { q: "composable это?", options: ["Встроенная функция", "Переиспользуемая функция", "Метод", "Компонент"], correct: 1 }
+    ];
+
+    let answers = [], testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const currentId = 9;
+      document.getElementById('sidebarLessons').innerHTML = lessons.map(l => `<a href="lesson-${l.id}.html" class="sidebar-item ${l.id === currentId ? 'active' : ''}">${l.id}. ${l.title}</a>`).join('');
+    }
+
+    function renderTest() {
+      document.getElementById('testQuestions').innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `<label class="test-option" onclick="selectAnswer(${i}, ${j})"><input type="radio" name="q${i}" value="${j}"><span>${opt}</span></label>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => opt.classList.toggle('selected', i === aIdx));
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) { alert('Ответьте на все вопросы!'); return; }
+      testChecked = true;
+      let score = 0;
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option').forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? 'Отлично!' : 'Повтори материал';
+      document.getElementById('testResult').style.display = 'block';
+      document.querySelector('.test-btn').style.display = 'none';
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[9] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>

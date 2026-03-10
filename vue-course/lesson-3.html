@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 3: Директивы</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 3</span>
+        Директивы
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Директивы</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Что такое директивы?</h2>
+        <p>Директивы — это специальные атрибуты с префиксом v-, которые добавляют реактивное поведение к HTML-элементам.</p>
+
+        <h2>v-if / v-else — Условный рендеринг</h2>
+        <p>Отображают или скрывают элемент в зависимости от условия.</p>
+
+        <pre><code><span class="code-tag">&lt;div</span> <span class="code-attr">v-if</span>=<span class="code-string">"isLoggedIn"</span><span class="code-tag">&gt;</span>Добро пожаловать!<span class="code-tag">&lt;/div&gt;</span>
+<span class="code-tag">&lt;div</span> <span class="code-attr">v-else</span><span class="code-tag">&gt;</span>Войдите в систему<span class="code-tag">&lt;/div&gt;</span></code></pre>
+
+        <h2>v-show — Скрытие элемента</h2>
+        <p>Скрывает элемент через CSS display, но не удаляет из DOM.</p>
+
+        <pre><code><span class="code-tag">&lt;div</span> <span class="code-attr">v-show</span>=<span class="code-string">"isVisible"</span><span class="code-tag">&gt;</span>Показывается/скрывается<span class="code-tag">&lt;/div&gt;</span></code></pre>
+
+        <h2>v-for — Цикл по массиву</h2>
+        <p>Позволяет рендерить список элементов.</p>
+
+        <pre><code><span class="code-tag">&lt;ul&gt;</span>
+  <span class="code-tag">&lt;li</span> <span class="code-attr">v-for</span>=<span class="code-string">"(item, index) in items"</span> <span class="code-attr">:key</span>=<span class="code-string">"index"</span><span class="code-tag">&gt;</span>
+    {{ item.name }}
+  <span class="code-tag">&lt;/li&gt;</span>
+<span class="code-tag">&lt;/ul&gt;</span></code></pre>
+
+        <h2>v-bind — Динамические атрибуты</h2>
+        <p>Связывает атрибут элемента с выражением. Сокращение — двоеточие (:).</p>
+
+        <pre><code><span class="code-tag">&lt;img</span> <span class="code-attr">:src</span>=<span class="code-string">"imageUrl"</span> <span class="code-attr">:alt</span>=<span class="code-string">"imageAlt"</span><span class="code-tag">&gt;</span>
+<span class="code-tag">&lt;button</span> <span class="code-attr">:disabled</span>=<span class="code-string">"isDisabled"</span><span class="code-tag">&gt;</span>Нажми<span class="code-tag">&lt;/button&gt;</span></code></pre>
+
+        <h2>v-on — Обработка событий</h2>
+        <p>Подписывается на события элемента. Сокращение — @.</p>
+
+        <pre><code><span class="code-tag">&lt;button</span> <span class="code-attr">@click</span>=<span class="code-string">"handleClick"</span><span class="code-tag">&gt;</span>Нажми<span class="code-tag">&lt;/button&gt;</span>
+<span class="code-tag">&lt;form</span> <span class="code-attr">@submit.prevent</span>=<span class="code-string">"submitForm"</span><span class="code-tag">&gt;</span>...<span class="code-tag">&lt;/form&gt;</span></code></pre>
+
+        <h2>v-model — Двустороннее связывание</h2>
+        <p>Создаёт двустороннюю связь между input и данных.</p>
+
+        <pre><code><span class="code-tag">&lt;input</span> <span class="code-attr">v-model</span>=<span class="code-string">"username"</span><span class="code-tag">&gt;</span>
+<span class="code-tag">&lt;textarea</span> <span class="code-attr">v-model</span>=<span class="code-string">"message"</span><span class="code-tag">&gt;&lt;/textarea&gt;</span>
+<span class="code-tag">&lt;select</span> <span class="code-attr">v-model</span>=<span class="code-string">"selected"</span><span class="code-tag">&gt;</span>...<span class="code-tag">&lt;/select&gt;</span></code></pre>
+
+        <h2>Модификаторы</h2>
+        <p>Модификаторы изменяют поведение директив.</p>
+
+        <pre><code><span class="code-comment">// .trim — обрезает пробелы</span>
+<span class="code-tag">&lt;input</span> <span class="code-attr">v-model.trim</span>=<span class="code-string">"text"</span><span class="code-tag">&gt;</span>
+
+<span class="code-comment">// .number — преобразует в число</span>
+<span class="code-tag">&lt;input</span> <span class="code-attr">v-model.number</span>=<span class="code-string">"age"</span><span class="code-tag">&gt;</span>
+
+<span class="code-comment">// .stop — останавливает всплытие</span>
+<span class="code-tag">&lt;button</span> <span class="code-attr">@click.stop</span>=<span class="code-string">"handleClick"</span><span class="code-tag">&gt;</span></code></pre>
+
+        <h2>Практическое задание</h2>
+        <p>Создай список задач с возможностью добавления и удаления элементов.</p>
+      </div>
+
+      <div class="test-section">
+        <div class="test-header">
+          <h3>📝 Тест на закрепление</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" onclick="checkTest()">Проверить</button>
+        <div class="test-result" id="testResult">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav">
+        <a href="lesson-4.html">Следующий урок →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "Какая директива для условия?", options: ["v-for", "v-if", "v-bind", "v-on"], correct: 1 },
+      { q: "v-model делает?", options: ["Односторонняя связь", "Двусторонняя связь", "Привязка событий", "Привязка атрибутов"], correct: 1 },
+      { q: "v-for используется для?", options: ["Условия", "Цикла", "Событий", "Атрибутов"], correct: 1 },
+      { q: "v-bind: (сокращение)", options: ["v-on:", "v-bind", ":", "@"], correct: 2 },
+      { q: "@click это сокращение от?", options: ["v-bind:click", "v-on:click", "v-model:click", "v-if:click"], correct: 1 }
+    ];
+
+    let answers = [];
+    let testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const currentId = 3;
+      document.getElementById('sidebarLessons').innerHTML = lessons.map(l => `<a href="lesson-${l.id}.html" class="sidebar-item ${l.id === currentId ? 'active' : ''}">${l.id}. ${l.title}</a>`).join('');
+    }
+
+    function renderTest() {
+      document.getElementById('testQuestions').innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `<label class="test-option" onclick="selectAnswer(${i}, ${j})"><input type="radio" name="q${i}" value="${j}"><span>${opt}</span></label>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => opt.classList.toggle('selected', i === aIdx));
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) { alert('Ответьте на все вопросы!'); return; }
+      testChecked = true;
+      let score = 0;
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option').forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? 'Отлично!' : 'Повтори материал';
+      document.getElementById('testResult').style.display = 'block';
+      document.querySelector('.test-btn').style.display = 'none';
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[3] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>

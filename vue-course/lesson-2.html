@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Урок 2: Vue Instance</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <h1 class="header-title">
+        <span class="lesson-num">Урок 2</span>
+        Vue Instance
+      </h1>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    </header>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-close" onclick="toggleSidebar()">×</button>
+      <div class="sidebar-header">📚 Оглавление</div>
+      <div id="sidebarLessons"></div>
+    </nav>
+
+    <main class="lesson-container">
+      <a href="index.html" class="home-btn">← К урокам</a>
+
+      <div class="lesson-header">
+        <h1>Vue Instance</h1>
+      </div>
+
+      <div class="lesson-content">
+        <h2>Создание экземпляра Vue</h2>
+        <p>Приложение Vue начинается с создания экземпляра. Это корневой объект, который управляет всем приложением.</p>
+
+        <pre><code><span class="code-keyword">const</span> app = Vue.<span class="code-function">createApp</span>({
+  <span class="code-comment">// опции приложения</span>
+})
+app.<span class="code-function">mount</span>(<span class="code-string">'#app'</span>)</code></pre>
+
+        <h2>Объект Data</h2>
+        <p>В data() хранятся реактивные данные приложения. Vue автоматически отслеживает их изменения.</p>
+
+        <pre><code><span class="code-property">data</span>() {
+  <span class="code-keyword">return</span> {
+    <span class="code-property">username</span>: <span class="code-string">'Ivan'</span>,
+    <span class="code-property">age</span>: <span class="code-number">25</span>,
+    <span class="code-property">isActive</span>: <span class="code-keyword">true</span>,
+    <span class="code-property">items</span>: [<span class="code-string">'a'</span>, <span class="code-string">'b'</span>, <span class="code-string">'c'</span>]
+  }
+}</code></pre>
+
+        <h2>Methods (Методы)</h2>
+        <p>Мethods содержат функции, которые можно вызывать из шаблона. Доступ к данным через this.</p>
+
+        <pre><code><span class="code-property">methods</span>: {
+  <span class="code-function">greet</span>() {
+    <span class="code-keyword">return</span> <span class="code-string">`Привет, ${</span><span class="code-keyword">this</span>.username<span class="code-string">}!`</span>
+  },
+  <span class="code-function">changeName</span>(<span class="code-property">newName</span>) {
+    <span class="code-keyword">this</span>.username = newName
+  }
+}</code></pre>
+
+        <h2>Computed (Вычисляемые свойства)</h2>
+        <p>Computed — это свойства, которые автоматически вычисляются на основе зависимостей. Результат кэшируется.</p>
+
+        <pre><code><span class="code-property">computed</span>: {
+  <span class="code-function">fullName</span>() {
+    <span class="code-keyword">return</span> <span class="code-keyword">this</span>.firstName + <span class="code-string">' '</span> + <span class="code-keyword">this</span>.lastName
+  },
+  <span class="code-function">isAdult</span>() {
+    <span class="code-keyword">return</span> <span class="code-keyword">this</span>.age >= <span class="code-number">18</span>
+  }
+}</code></pre>
+
+        <h2>Как работает реактивность?</h2>
+        <p>Vue отслеживает изменения в data и автоматически обновляет DOM. Это называется реактивностью.</p>
+
+        <pre><code><span class="code-comment">// При изменении count, DOM обновится автоматически</span>
+<span class="code-property">data</span>() {
+  <span class="code-keyword">return</span> { <span class="code-property">count</span>: <span class="code-number">0</span> }
+}
+
+<span class="code-comment">&lt;button @click="count++"&gt;{{ count }}&lt;/button&gt;</span></code></pre>
+
+        <h2>Практическое задание</h2>
+        <p>Создай счётчик с кнопками "+" и "−", отображающий текущее значение.</p>
+      </div>
+
+      <div class="test-section">
+        <div class="test-header">
+          <h3>📝 Тест на закрепление</h3>
+        </div>
+        <div id="testQuestions"></div>
+        <button class="test-btn" onclick="checkTest()">Проверить</button>
+        <div class="test-result" id="testResult">
+          <h4>Результат</h4>
+          <div class="score" id="scoreText">0/5</div>
+          <p class="message" id="resultMessage"></p>
+        </div>
+      </div>
+
+      <div class="lesson-nav" id="lessonNav">
+        <a href="lesson-3.html">Следующий урок →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const lessons = [
+      { id: 1, title: "Введение в Vue.js" },
+      { id: 2, title: "Vue Instance" },
+      { id: 3, title: "Директивы" },
+      { id: 4, title: "Компоненты" },
+      { id: 5, title: "Computed & Watch" },
+      { id: 6, title: "Lifecycle Hooks" },
+      { id: 7, title: "Vue CLI и Router" },
+      { id: 8, title: "Pinia (State)" },
+      { id: 9, title: "Composition API" },
+      { id: 10, title: "Итоговый проект" }
+    ];
+
+    const questions = [
+      { q: "Где хранятся реактивные данные в Vue?", options: ["methods", "data", "computed", "watch"], correct: 1 },
+      { q: "Что такое computed свойства?", options: ["Методы", "Вычисляемые с кэшированием", "Наблюдатели", "Хуки"], correct: 1 },
+      { q: "Как обратиться к данным внутри methods?", options: ["this.data", "this.$data", "data", "self.data"], correct: 1 },
+      { q: "Computed свойства кэшируются?", options: ["Нет", "Да", "Только при SSR", "Зависит от настройки"], correct: 1 },
+      { q: "Какое ключевое слово возвращает data?", options: ["return this", "return data", "return {}", "return state"], correct: 2 }
+    ];
+
+    let answers = [];
+    let testChecked = false;
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.querySelector('.sidebar-overlay').classList.toggle('visible');
+    }
+
+    function renderSidebar() {
+      const sidebar = document.getElementById('sidebarLessons');
+      const currentId = 2;
+      sidebar.innerHTML = lessons.map(l => {
+        const isActive = l.id === currentId;
+        return `<a href="lesson-${l.id}.html" class="sidebar-item ${isActive ? 'active' : ''}">${l.id}. ${l.title}</a>`;
+      }).join('');
+    }
+
+    function renderTest() {
+      const container = document.getElementById('testQuestions');
+      container.innerHTML = questions.map((q, i) => `
+        <div class="test-question">
+          <h4>${i + 1}. ${q.q}</h4>
+          <div class="test-options">
+            ${q.options.map((opt, j) => `
+              <label class="test-option" onclick="selectAnswer(${i}, ${j})">
+                <input type="radio" name="q${i}" value="${j}">
+                <span>${opt}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectAnswer(qIdx, aIdx) {
+      if (testChecked) return;
+      answers[qIdx] = aIdx;
+      document.querySelectorAll('.test-question')[qIdx].querySelectorAll('.test-option').forEach((opt, i) => {
+        opt.classList.toggle('selected', i === aIdx);
+      });
+    }
+
+    function checkTest() {
+      if (answers.length < questions.length || answers.some(a => a === undefined)) {
+        alert('Ответьте на все вопросы!');
+        return;
+      }
+
+      testChecked = true;
+      let score = 0;
+
+      questions.forEach((q, i) => {
+        const isCorrect = answers[i] === q.correct;
+        if (isCorrect) score++;
+        
+        const options = document.querySelectorAll('.test-question')[i].querySelectorAll('.test-option');
+        options.forEach((opt, j) => {
+          if (j === q.correct) opt.classList.add('correct');
+          else if (j === answers[i] && !isCorrect) opt.classList.add('incorrect');
+        });
+      });
+
+      document.getElementById('scoreText').textContent = `${score}/${questions.length}`;
+      document.getElementById('resultMessage').textContent = score >= 4 ? 'Отлично! Продолжай!' : 'Перечитай материал и попробуй ещё раз';
+      document.getElementById('testResult').style.display = 'block';
+      document.querySelector('.test-btn').style.display = 'none';
+
+      if (score >= 3) {
+        const progress = JSON.parse(localStorage.getItem('vueCourseProgress')) || {};
+        progress[2] = { completed: true, inProgress: false };
+        localStorage.setItem('vueCourseProgress', JSON.stringify(progress));
+      }
+    }
+
+    renderSidebar();
+    renderTest();
+  </script>
+</body>
+</html>
